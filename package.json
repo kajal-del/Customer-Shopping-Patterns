@@ -1,0 +1,61 @@
+{
+  "name": "generatedata",
+  "version": "4.0.14",
+  "description": "DataTest",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "customer_id": "column",
+    "loyalty_score": "column",
+	"product_id":"column",
+	"product_category":"column"
+	"purchase_count":"column"
+    "clean": "npx rimraf client/dist",
+    "build": "node ./client/build/build.js",
+    "startNodeDevServer": "nodemon ./server/app.js",
+    "webpackDev": "webpack serve --config ./client/webpack.config.js --mode=development",
+    "webpackProd": "webpack --config ./client/webpack.config.js --mode=production",
+    "test": "env NODE_ENV=test jest",
+    "prod": "cd client && grunt && yarn build && yarn webpackProd",
+    "prodAll": "COMPOSE_HTTP_TIMEOUT=150 docker-compose -f docker-compose-prod.yml up",
+     },
+  "repository": {
+    "type": "git",
+  },
+  "author": "kajal-del",
+  "readmeFilename": "README.md",
+    "bugs": {
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+        "setupFilesAfterEnv": [
+      "<rootDir>/client/tests/jestSetup.ts"
+    ],
+    "testRegex": "/__tests__/.*\\.(ts|tsx)$",
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules",
+      "^~components(.*)$": "<rootDir>/client/src/components$1",
+      "^~types(.*)$": "<rootDir>/client/types$1",
+      "^~utils(.*)$": "<rootDir>/client/src/utils$1",
+      "^~store(.*)$": "<rootDir>/client/src/core/store$1",
+      "^~core(.*)$": "<rootDir>/client/src/core$1"
+    },
+    "collectCoverageFrom": [
+      "<rootDir>/client/src/**/*.(ts|tsx)"
+    ],
+    "coveragePathIgnorePatterns": [
+      "bundle.ts",
+      ".*.scss.d.ts",
+      ".*.types.d.ts",
+      "src/plugins/dataTypes/_.*/*.ts"
+    ]
+  },  
+  }
+}
+

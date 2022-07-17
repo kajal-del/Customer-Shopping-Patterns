@@ -1,0 +1,126 @@
+---------All the below codes are written and executes in jupyter notebook----------------------
+----------importing libraries------------
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
+plt.style.use('seaborn-whitegrid')
+
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, f1_score
+
+from sklearn.tree import DecisionTreeClassifier
+
+from IPython.core.interactiveshell import InteractiveShell
+InteractiveShell.ast_node_interactivity = "all"
+
+pd.set_option('display.max_colwidth', -1)
+
+import warnings
+warnings.simplefilter('ignore')
+
+-------------loading dataset---------------------
+
+ss = pd.read_csv('/content/drive/MyDrive/input_data/starter/customers.csv.csv')       # Sample Submission Dataset
+train = pd.read_csv('/content/drive/MyDrive/input_data/starter/products.csv')                # Train Dataset
+test = pd.read_csv('/content/drive/MyDrive/input_data/starter/transactions/.csv')                  # Test Dataset
+
+train.head()               # First 5 rows of the Dataset
+
+-------------data profiling------------------
+
+train.dtypes                       # Data Types
+
+train.info()                 # info of the Dataset
+
+train.shape, test.shape             # Shape of Training & Test Dataset
+
+train.describe()                   # Deep information of the Dataset
+
+------------------checking for missing values------------------------
+import missingno as mo
+
+mo.bar(train)              #Finding out missing value in dataset in graphical form using missingno library
+
+train.isnull().sum()
+
+---------------Separating categorical and continuous columns from the dataset--------------------
+cat=[]
+con=[]
+for i in train.columns:
+    if(train[i].dtypes == 'object'):
+        cat.append(i)
+    else:
+        con.append(i)
+		
+cat                         # cat is Categorical Columns
+
+
+con                         # con is Continous columns
+
+train.nunique()         # Unique Values 
+
+
+train["product_id"].value_counts()          # Checking unique values in 'product_id' (primary key)
+
+
+-------------checking for duplicate values in product_id columns---------------------
+import collections
+duplicate_items = [item for item , count in collections.Counter(train.product_id).items() if count>1]
+len(duplicate_items)
+
+-----if duplicates are found from the above code tehn use the below code to drop the duplicate queries------------
+train = train.drop_duplicates(subset=['product_id'], keep='last')     # Droping the duplicate values
+
+train                                                             # Data after droping duplicate values
+
+train.reset_index(inplace= True)              # Reset the index
+
+train                                        # printing the train dataset
+
+
+train.info()
+
+train.isnull().sum()
+
+------------if there is null values in any column then use the below code----
+train['loyalty_score'] = train['loyalty_score'].fillna(0)            # Filling the Null values with 0
+
+train                                                # print the train dataset
+
+# Function to get Target variable
+def loyalty_score(x):
+  if(x == 0):
+    return 0
+  if(x != 0):
+    return 1
+	
+train                                                 # printing the dataset
+
+train.loyalty_score.value_counts()
+
+
+train['loyalty_score'].value_counts(normalize=True).plot(kind='bar')       # ploting it as a bar graph
+
+
+------------EDA (EXPLORATORY DATA ANALYSIS)--------------------
+#Count of observations in each category
+n = ['customer_id','loyalty_score','product_id','product_category','purchase_count']
+
+for i in n:
+    print(train[i].value_counts())
+	
+-------------univariate----------------------------------
+
+n = ['customer_id','loyalty_score','product_id','product_category','purchase_count']
+
+train['product_category'].value_counts(normalize=True).plot.bar(title='product_category')
+
+train['purchase_count'].value_counts(normalize=True).plot.bar(title='purchase_count')
+
+train['loyalty_score'].value_counts(normalize=True).plot.bar(title='loyalty_score')
+
+train['product_id'].value_counts(normalize=True).plot.bar(title='product_id')
+
+train['customer_id'].value_counts(normalize=True).plot.bar(title='customer_id')
